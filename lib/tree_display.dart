@@ -1,17 +1,14 @@
-
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:street_trees/tree_database.dart';
 import 'package:street_trees/tree.dart';
 
 class TreeDisplay extends StatefulWidget {
-  @override 
+  @override
   _TreeDisplayState createState() => _TreeDisplayState();
-
 }
 
 class _TreeDisplayState extends State<TreeDisplay> {
-
   List<Tree> trees;
   bool isLoaded = false;
   @override
@@ -28,20 +25,17 @@ class _TreeDisplayState extends State<TreeDisplay> {
       isLoaded = true;
     });
   }
- @override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child:
-        //  isLoaded ?
-        // List.generate(trees.length, (i) {
-        //   return Center (
-        //     child: Text('$trees[i].commonName')
-        //   );
-        // })
-        // :
-         CircularProgressIndicator()
-      )
-    );
+        body: Center(
+            child: isLoaded
+                ? ListView.builder(
+                    itemCount: trees.length,
+                    itemBuilder: (context, i) {
+                      return ListTile(title: Text('${trees[i].commonName}'));
+                    })
+                : CircularProgressIndicator()));
   }
 }
