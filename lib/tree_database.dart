@@ -4,19 +4,19 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:street_trees/tree.dart';
+import 'package:street_trees/utils/nsdate.dart';
 
 class TreeDatabase {
   final Future<Database> database;
 
   TreeDatabase({path:String}) : database = openDatabase(path);
 
-  static final int coreDataEpoch = 978307200000;
-
+ 
   Future<List<Tree>> trees() async {
     final Database db = await database;
     final List<Map<String, dynamic>> allTrees = await db.query('ZTREE');
     return List.generate (allTrees.length, (i) {
-      DateTime datePlanted = DateTime.fromMillisecondsSinceEpoch((allTrees[i]['ZDATEPLANTED'] * 1000) + coreDataEpoch);
+      DateTime datePlanted = createFromNSdateEpochInteval(allTrees[i]['ZDATEPLANTED']);
       return Tree (
         treeId: allTrees[i]['ZTREEID'],
         commonName: allTrees[i]['ZCOMMONNAME'],
