@@ -10,11 +10,13 @@ class TreeDatabase {
 
   TreeDatabase({path:String}) : database = openDatabase(path);
 
+  static final int coreDataEpoch = 978307200000;
+
   Future<List<Tree>> trees() async {
     final Database db = await database;
     final List<Map<String, dynamic>> allTrees = await db.query('ZTREE');
     return List.generate (allTrees.length, (i) {
-      DateTime datePlanted = DateTime.fromMicrosecondsSinceEpoch(allTrees[i]['ZDATEPLANTED']);
+      DateTime datePlanted = DateTime.fromMillisecondsSinceEpoch((allTrees[i]['ZDATEPLANTED'] * 1000) + coreDataEpoch);
       return Tree (
         treeId: allTrees[i]['ZTREEID'],
         commonName: allTrees[i]['ZCOMMONNAME'],
